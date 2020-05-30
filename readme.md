@@ -6,7 +6,7 @@ Muchas gracias por asistir a mi charla. A continuación, se muestra el código h
 
 Para la ejecución de los programas hechos, se deben instalar las siguientes herramientas:
 
-* Python 3.x: Descargar de su [página oficial]([https://www.python.org/](https://www.python.org/))
+* Python 3.x: Descargar de su [página oficial](https://www.python.org/)
 
 Una vez instalado Python, ejecutar los siguientes comandos>
 
