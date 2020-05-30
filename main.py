@@ -17,6 +17,18 @@ def leer_archivo(ruta):
     
     return frases_archivo
 
+def etiquetar_datos(frases_pos, frases_neg):
+    datos = []
+
+    for f in frases_pos.split('\n'):
+        datos.append((f, "pos"))
+    for f in frases_neg.split('\n'):
+        datos.append((f, "neg"))
+
+    random.shuffle(datos)
+
+    return datos
+
 def tokenizar_dataset(frases_pos, frases_neg):
     tokens = []
     palabras_vacias = stopwords.words('spanish')
@@ -28,17 +40,6 @@ def tokenizar_dataset(frases_pos, frases_neg):
     tokens.extend([t for t in tokens_neg if t not in palabras_vacias])
 
     return tokens
-
-
-def etiquetar_datos(frases_pos, frases_neg):
-    datos = []
-
-    for f in frases_pos.split('\n'):
-        datos.append((f, "pos"))
-    for f in frases_neg.split('\n'):
-        datos.append((f, "neg"))
-
-    return datos  
 
 def buscar_palabras(dataset, palabras_dataset):
     tokenizador = ToktokTokenizer()
@@ -78,18 +79,17 @@ if __name__ == "__main__":
 
     palabras_dataset = list(frases_token.keys())[:3000]
     dataset = [(buscar_palabras(palabra, palabras_dataset), categoria) for (palabra, categoria) in frases_dataset]
-    random.shuffle(dataset)
     dataset_entretamiento = dataset[:1900]
     dataset_pruebas =  dataset[1900:]
 
-    clasificador = entrenar_clasificador(dataset_entretamiento)
-    # clasificador = cargar_clasificador()
+    # clasificador = entrenar_clasificador(dataset_entretamiento)
+    clasificador = cargar_clasificador()
 
-    # print("Precisión del clasificador Naive Bayes:", (nltk.classify.accuracy(clasificador, dataset_pruebas))*100)
     clasificador.show_most_informative_features(15)
+    print("Precisión del clasificador Naive Bayes:", (nltk.classify.accuracy(clasificador, dataset_pruebas))*100)
 
     texto1 = "Muchas gracias por el regalo, fue un excelente detalle"
-    texto2 = "Este clima está horrible, no me gusta para nada"
+    texto2 = "Este clima está horrible, detesto cuando llueve"
     print(texto1, ":", clasificar(texto1, clasificador, palabras_dataset))
     print(texto2, ":", clasificar(texto2, clasificador, palabras_dataset))
 
