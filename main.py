@@ -19,9 +19,14 @@ def leer_archivo(ruta):
 
 def tokenizar_dataset(frases_pos, frases_neg):
     tokens = []
+    palabras_vacias = stopwords.words('spanish')
     tokenizador = ToktokTokenizer()
-    tokens.extend(tokenizador.tokenize(frases_pos))
-    tokens.extend(tokenizador.tokenize(frases_neg))
+    tokens_pos = tokenizador.tokenize(frases_pos)
+    tokens_neg = tokenizador.tokenize(frases_neg)
+    
+    tokens.extend([t for t in tokens_pos if t not in palabras_vacias])
+    tokens.extend([t for t in tokens_neg if t not in palabras_vacias])
+
     return tokens
 
 
@@ -77,10 +82,10 @@ if __name__ == "__main__":
     dataset_entretamiento = dataset[:1900]
     dataset_pruebas =  dataset[1900:]
 
-    # clasificador = entrenar_clasificador(dataset_entretamiento)
-    clasificador = cargar_clasificador()
+    clasificador = entrenar_clasificador(dataset_entretamiento)
+    # clasificador = cargar_clasificador()
 
-    print("Precisión del clasificador Naive Bayes:", (nltk.classify.accuracy(clasificador, dataset_pruebas))*100)
+    # print("Precisión del clasificador Naive Bayes:", (nltk.classify.accuracy(clasificador, dataset_pruebas))*100)
     clasificador.show_most_informative_features(15)
 
     texto1 = "Muchas gracias por el regalo, fue un excelente detalle"
